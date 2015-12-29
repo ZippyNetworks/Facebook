@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- Bootcards CSS for desktop: -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootcards/1.0.0/css/bootcards-desktop.min.css">
+  
+    <!--angularjs -->
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+  
+  <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<title>Facebook</title>	
+
+ </head>
+<body style="background-color:#E0EBFF" ng-app="myApp2" ng-controller="profileController">
+ 	<div style="background-color:#3D3D8B;   max-height:100px;  color:white;">
+	  		<div class ="container">
+		    	<div class="row row fluid">
+		     			<div class ="col-md-6">
+		  				 	<span style="color:white; font-family:verdana; font-size:125%; padding-left:2cm; padding-top:0.5cm"><p>Welcome {{groupdetails.groupname}} </a> </p></span>
+		  				 </div>
+		  				 <div class ="col-md-3" >
+		  				 </div>	
+		   				 <div class ="col-md-3" >	<br>
+		   					<button type="button" class="btn btn-default" ng-model= "clicked" ng-click = "deletegroup()">DeleteGroup</button>
+		   				</div>	
+	  			</div>
+	  	  </div><!----------container------->
+	 </div>	<!----block------------->
+	 
+	 <div class ="container">
+		    	<div class="row row fluid">
+		     			<div class ="col-md-6">
+					 			<img  src ="http://www.covermyfb.com/media/covers/12856-welcome.jpg"> 
+					 	</div>
+				</div>	 			
+	 					<div class="row">
+	 						<div class = "col-md-9">
+						 		   <nav class="navbar navbar-default ">
+									      <ul class="nav nav-pills nav-justified">
+									        <li><a href="#">Discussion</a></li>
+									        <li><a href="#" >Event</a></li> 
+									        <li><a href="#" > Photos</a></li> 
+									          <li><a href="#">Files</a></li>
+									      </ul>
+										</nav>
+
+								        <div class="modal-body">
+					<div class="row">
+	 						<div class = "col-md-6">       
+								        <div class="form-group" >
+													<b>ADD MEMBERS</b> <br><br>
+													 <select class="form-control" id="add" ng-model="selectedPerson">
+														  <option>Members</option>
+														  <option ng-repeat="ud in userdetails" value="{{ud.email }}"><div>{{ud.firstname + " " + ud.lastname}}</div></option>
+														  </select> <br>
+												    	  <button type="button" class="btn btn-default" ng-model= "clicked" ng-click = "addmember(selectedPerson);">Ok</button>	  
+											  		</div>
+							</div>  		
+							<div class = "col-md-6">  
+										          <div class="form-group"  style="list-style: none;" >
+													<b>MEMBERS</b> 
+														<div id="desc" style="display:block;border:1px solid #A8A8A8 ; padding:20px;background-color: white; margin-top: 20px;">
+													 	<ul class="list-inline">
+													 	 <li ng-repeat="member in groupdetails.members1" value="{{member.memberemail}}"><div class="col-xs-12 well well-sm"><img src = "http://ezpro.co/blog/wp-content/uploads/2014/12/red-delete-button.jpg" height="20" width="20" ng-click = "deletemember(member.memberemail)" style="cursor: pointer;" >{{member.memberfirstname + " " + member.memberlastname}}</div></li>
+														
+											  			</ul>	
+											  		</div>
+							</div>	
+											  </div>
+				</div>
+		      </div>
+			</div>
+		</div>	     
+						           
+ </div>
+ 	
+	<script>
+		var app = angular.module('myApp2', []);
+		app.controller('profileController', function($scope,$http) {
+
+				$scope.loadgroup1 = function() {
+		 	alert("In group load function for group id ");
+		 	 	$http({
+			            method: 'POST',
+			            url:  '/loadgroup1',
+			            }).success(function(response){
+			           		alert(JSON.stringify(response));
+			           		$scope.groupdetails =  JSON.parse(response.groupdetails);
+			           		$scope.userdetails =  JSON.parse(response.userdetails);
+			        }).error(function(error){
+			            alert("ERROR LOADING GROUP");
+			        });
+			  };
+			  
+			 $scope.loadgroup1(); 
+			 
+			  $scope.deletegroup = function() {	
+				alert("In delete group function." );	
+		 	 	$http({
+			            method: 'GET',
+			            url:  '/delgroup',
+			            }).success(function(response){
+			           		 i = JSON.parse(response.gid);
+			           		 alert("Deleted group");
+			           		 window.location = '/home';
+				       			 }).error(function(error){
+				           		alert("ERROR DELETEING GROUP");
+				       			});
+			 };
+			
+				 $scope.deletemember = function(mid) {	
+				alert("In delete member function. Memeber id is " + mid);	
+		 	 	$http({
+			            method: 'POST',
+			            url:  '/delmember',
+			            data: {"mid": mid }
+			            }).success(function(response){
+			           		 i = JSON.parse(response.gid);
+			           		 $scope.loadgroup1();	 
+			           		 alert("Deleted Member");
+				       			 }).error(function(error){
+				           		alert("ERROR DELETEING MEMBER");
+				       			});
+			 };
+
+			$scope.addmember = function(mid) {	
+				alert("In adding member function. Memeber id is " + mid );	
+		 	 	$http({
+			            method: 'POST',
+			            url:  '/addmember',
+			            data: {"mid": mid }
+			            }).success(function(response){
+			           		 alert("Added member group");
+			           		 i = JSON.parse(response.gid);
+			           		 $scope.loadgroup1(); 
+				       			 }).error(function(error){
+				           		alert("ERROR ADDING NEW MEMBER");
+				       			});
+			 };
+			 
+		});
+	</script>	
+ </body>
+ </html>

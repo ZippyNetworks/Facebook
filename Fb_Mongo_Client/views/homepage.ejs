@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!--angularjs -->
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+  
+  <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+   <title>Facebook</title>	
+ 
+ </head>
+ 
+ <body style="background-color:#E0EBFF" ng-app = "myApp">
+  <div  ng-app="myApp" ng-controller="personController">	
+  
+  			<div style="background-color:#3D3D8B;   max-height:100px;  color:white;  ">
+	  		<div class ="container">
+		    	<div class="row row fluid">
+		     			<div class ="col-md-6">
+		  				 	<span style="color:white; font-family:verdana; font-size:125%; padding-left:2cm; padding-top:0.5cm"><p>Welcome <a ng-click = "profile()"><img src="http://www.icartoonwallpapers.com/wp-content/uploads/2015/09/Cartoon-Bunny.jpg" height="30" width= "30" ><span style="color:white">{{users.firstname}} {{users.lastname}} </span></a> </p></span>
+		  				 	</div>
+		  				 <div class ="col-md-3" >
+		  				 </div>	
+		   				 <div class ="col-md-3" >	
+		   					<span style="color:white; font-family:verdana; font-size:125%; padding-left:2cm; padding-top:0.5cm"><a ng-click="signout()" style="color:white" >{{fullname}} SignOut</a></span>
+		   					<br><br>
+		   					<a ng-click = "showfriend()" style="cursor:pointer"> <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRQWfWy3OqY6z0pxO0prmLOLiSYLEQbI7ok_tFiSjtW1hUUCix-xJZnLREpSA" height = "20" width="20"><b><span style="color:white"> You have  {{users.request.length}} notification</span> </b></a>
+		   					<div ng-hide="status1"  style="z-index: 1; position: relative;">
+										<select class="form-control" id="add" ng-model="selectedfrnd">
+											<option ng-repeat="request in requests" value="{{request.email}}">{{request.firstname}} {{request.lastname}}</option>
+										</select>
+										<button ng-click="accept(selectedfrnd)">Accept </button> <button  ng-click="decline(selectedfrnd)"> Decline </button>		    	     	  
+									</div>		
+		   				</div>	
+	  			</div>
+	  			
+	  		</div><!-- /div container -->
+	  	</div>
+		
+	
+		<div class ="container">	
+	  		<div class="row">	
+	  				
+	            <div class = "col-md-3" >
+		  				<br><br><b>
+		  				<!-------------------------- DISPLAY GROUP ----------------------------->
+		  					
+	               		<div >
+		  					  <div class="panel panel-default">  
+			           				<div class="panel-heading">	 
+			           				    GROUPS		                
+	                    	</div>
+	                   		
+	                     <div class="panel-body">
+			  				<div class="bootcards-list">
+				             <a class="list-group-item" href="#" ng-repeat="group in users.mygroup" ng-click = "loadgroup(group)" data-toggle="modal" data-target="#mygrpModal">{{group}}
+				            </a>
+		           		  </div>
+		           </div>	<!----------panel body-------->   	
+		          </div> <!--panel--->   
+	                    
+	                    <!------------------------CREATE GROUP BUTTON----------------------------->
+	                    
+	                    <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal">create group</button>
+						<div class="modal fade" id="myModal" role="dialog">
+						    <div class="modal-dialog">
+						      <div class="modal-content">
+								        <div class="modal-header">
+								          <button type="button" class="close" data-dismiss="modal">&times;</button>
+								          <h4 class="modal-title">Create New Group</h4>
+								        </div>
+								        <div class="modal-body">
+										          <div class="form-group">
+											  		Group name <input class="form-control" type = "Text" ng-model="group_name" placeholder = "Group Name">
+											  		</div>
+											  		<div class="form-group">
+													Group Description <br><textarea ng-model="grpdesc" rows="5" cols="65"></textarea>
+														  </select>
+											  		</div>
+								        </div>
+								        <div class="modal-footer">
+								          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+								         <button type="button" class="btn btn-default" ng-model= "clicked" ng-click = "creategroup() ">Create</button>
+								        </div>
+						      </div>
+						    </div>
+						  </div>	
+	                  <!--------------------- CREATE GROUP BUTTON ENDS----------------------------->  
+	              </div> <!---box outline-->      		    
+	           </div> <!-- /div col-md-3 -->
+	              
+	             <!--------------------------------------NEWS FEED-----------------------------------> 
+	           <div class="col-md-5" > 
+	           <br>
+	           <br>
+		        	<textarea class="form-control" rows="4" cols = "55" ng-model="text" placeholder = "What's on your mind"></textarea>
+		        	<div align = "right"  style = "background-color: white">
+					     <button ng-click="postfeed(text)">Post</button>
+  						 </div>
+		        	<br>
+		        	
+		        	
+		        		
+	               		<div ng-repeat = "feed in feeds">
+		  					  <div class="panel panel-default">  
+			           				<div class="panel-heading">	 
+			           				   <img src="http://www.icartoonwallpapers.com/wp-content/uploads/2015/09/Cartoon-Bunny.jpg" height="30" width= "30" > Posted by {{feed.firstname + " " + feed.lastname}}	                
+	                    			</div>
+	                   		
+	                   				 <div class="panel-body">
+				           			{{feed.content}}
+		           		  			</div>
+		           			</div>	
+		          </div> <!--panel---> 
+		          
+		          
+		        	
+		        
+	           
+	           </div><!-- /div col-md-6 -->
+	           
+	     <!----------------------------FRIENDS LIST----------------------------------------->      
+	        <div class="col-md-4" > 
+	                	  			</div> <!-- /div col-md-3 -->
+	  	</div>	
+	 </div><!--container-->
+</div>	<!-- /div ng controller --> 
+
+	<script>
+		var app = angular.module('myApp', []);
+		app.controller('personController', function($scope,$http) {
+			var i ;	
+		
+				 	 	
+		 	 	$scope.loadpage = function() {
+		 	 	$scope.text = "";
+		 	 	$scope.status1= true;	
+		 	 	$scope.myVar = true;
+		 	 	alert("in load page");
+				$scope.count = 0;
+			    	$http({
+			            method: 'GET',
+			            url:  '/loadpage',
+			            }).success(function(response){
+			           		alert(JSON.stringify(response));
+			            	 $scope.users= JSON.parse(response.user);
+			            	 $scope.feeds= JSON.parse(response.newsfeed);
+			            	// alert(response.users.firstname);
+			            	 $scope.lives= "Lives in " + JSON.parse(response.lives);
+			            	 $scope.works= " Works at " + JSON.parse(response.works);
+			            	 $scope.highschool= "Studied in " +JSON.parse(response.highschool);
+							 $scope.aboutme= JSON.parse(response.aboutme);	
+							 $scope.groups =  JSON.parse(response.groups);
+							 $scope.grouping =  JSON.parse(response.grouping);
+							 $scope.interests = "Interested in " +  JSON.parse(response.interests);
+							  $scope.fusers =  JSON.parse(response.users);
+							  $scope.count =  response.count;
+						 	$scope.friends = 	JSON.parse(response.friends);
+						 	$scope.feeds = JSON.parse(response.feeds);
+			        }).error(function(error){
+			            alert("ERROR LOADING");
+			        });
+			    };
+		 	 
+		 	  $scope.loadpage();
+		 	 
+		 	  $scope.creategroup = function(){
+		 	  		 $scope.myVar = !$scope.myVar;
+		 	  		$http({
+				            method: 'POST',
+				            url: '/addgroup',
+				            data: { "groupname": $scope.group_name , "groupdesc" : $scope.grpdesc}
+				         }).success(function(response){
+				        		 alert("Added group");
+				        		 $scope.loadpage();
+				       			 }).error(function(error){
+				           			alert("error creating grups");
+				       				});
+				};	
+		
+			
+			$scope.loadgroup = function(grpid) {
+			alert("in group" + grpid);
+			    	$http({
+			            method: 'POST',
+			            url: '/loadgroup',
+			            data: {"grpname": grpid}
+			            }).success(function(response){
+			           		alert(JSON.stringify(response));
+			            	if(response.login == "Success")
+			           			window.location = '/group';
+			        }).error(function(error){
+			            alert("REDIRECT FAILED");
+			        });
+			    };
+			    						 
+			$scope.addfriend = function(mid) {	
+		 	 	$http({
+			            method: 'POST',
+			            url:  '/addfriend',
+			            data: {"mid": mid }
+			            }).success(function(response){
+			           		 alert("Request sent");
+			           		 $scope.loadpage();
+				       			 }).error(function(error){
+				           		alert("ERROR ADDING FRIEND");
+				       			});
+			 };
+			 
+			
+			 
+			 
+			 $scope.showfriend = function() {	
+				$scope.status1 = !$scope.status1;	
+		 	 	$http({
+			            method: 'GET',
+			            url:  '/showfriend',
+			            }).success(function(response){
+			           		 $scope.requests = JSON.parse(response.user3);
+				       			 }).error(function(error){
+				           		alert("ERROR SHOWING FRIEND");
+				       			});
+			 };
+			 
+			 
+			 
+			 $scope.accept = function(mid) {	
+		 	 	$http({
+			            method: 'POST',
+			            url:  '/accept',
+			            data: {"mid": mid }
+			            }).success(function(response){
+			           		 alert("Request sent");
+			           		 $scope.loadpage();
+				       			 }).error(function(error){
+				           		alert("ERROR ACCEPTING");
+				       			});
+			 };
+			 
+			 
+			 $scope.decline = function(mid) {	
+		 	 	$http({
+			            method: 'POST',
+			            url:  '/decline',
+			            data: {"mid": mid }
+			            }).success(function(response){
+			           		 alert("Request declined");
+			           		 $scope.loadpage();
+				       			 }).error(function(error){
+				           		alert("ERROR DECLINING");
+				       			});
+			 };
+			 
+			  
+			 $scope.profile = function() {	
+		 	 	$http({
+			            method: 'GET',
+			            url:  '/profile',
+			                }).success(function(response){
+			           		 alert("Redirecting");
+			           		 window.location = '/profile';
+				       			 }).error(function(error){
+				           		alert("ERROR LOADING PROFILE");
+				       			});
+			 };
+			 
+			 $scope.postfeed = function(text) {	
+		 	 	$http({
+			            method: 'POST',
+			            url:  '/postfeed',
+			            data: {"text": text }
+			            }).success(function(response){
+			           		 $scope.loadpage();	 
+			           		 alert("Added post");
+				       			 }).error(function(error){
+				           		alert("ERROR POSTING NEWS FEED");
+				       			});
+			 };
+			 			 
+		$scope.signout = function() {
+		$http({
+				  url: '/signout', 
+				  method: "GET",
+				 }).success(function(response){
+	            window.location = '/index';
+	          
+	        }).error(function(error){
+	            alert("error");
+	        });
+  	
+	};
+
+});
+	</script>	
+  </body>
+</html>
